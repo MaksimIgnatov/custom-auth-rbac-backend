@@ -335,7 +335,7 @@ class UserRoleViewSetTest(TestCase):
     def test_assign_role(self):
         """Тест назначения роли пользователю."""
         self.client.force_authenticate(user=self.user)
-        url = reverse('permissions:user-role-assign')
+        url = '/api/permissions/user-roles/assign/'
         new_user = User.objects.create_user(
             email='newuser@example.com',
             username='newuser',
@@ -355,7 +355,7 @@ class UserRoleViewSetTest(TestCase):
     def test_assign_role_duplicate(self):
         """Тест назначения уже существующей роли."""
         self.client.force_authenticate(user=self.user)
-        url = reverse('permissions:user-role-assign')
+        url = '/api/permissions/user-roles/assign/'
         new_user = User.objects.create_user(
             email='newuser@example.com',
             username='newuser',
@@ -384,7 +384,7 @@ class UserRoleViewSetTest(TestCase):
             password='newpass123'
         )
         UserRole.objects.create(user=new_user, role=self.role)
-        url = reverse('permissions:user-role-remove')
+        url = '/api/permissions/user-roles/remove/'
         data = {
             'user_id': new_user.id,
             'role_id': self.role.id
@@ -396,7 +396,7 @@ class UserRoleViewSetTest(TestCase):
     def test_remove_role_nonexistent(self):
         """Тест удаления несуществующей роли."""
         self.client.force_authenticate(user=self.user)
-        url = reverse('permissions:user-role-remove')
+        url = '/api/permissions/user-roles/remove/'
         data = {
             'user_id': 999,
             'role_id': 999

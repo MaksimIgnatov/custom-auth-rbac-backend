@@ -39,16 +39,19 @@ class UserModelTest(TestCase):
 
     def test_set_password_bcrypt(self):
         """Тест хеширования пароля с помощью bcrypt."""
-        user = User.objects.create_user(**self.user_data)
+        user = User(**self.user_data)
+        user.set_password('testpass123')
+        user.save()
         self.assertTrue(user.password.startswith('bcrypt$'))
         self.assertTrue(user.check_password('testpass123'))
         self.assertFalse(user.check_password('wrongpass'))
 
     def test_check_password_django(self):
         """Тест проверки пароля с Django хешированием."""
-        user = User.objects.create_user(**self.user_data)
+        from django.contrib.auth.hashers import make_password
+        user = User(**self.user_data)
         # Используем стандартный метод Django для установки пароля
-        user.set_password('djangopass123')
+        user.password = make_password('djangopass123')
         user.save()
         # Проверяем, что пароль не начинается с bcrypt$
         self.assertFalse(user.password.startswith('bcrypt$'))
